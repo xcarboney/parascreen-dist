@@ -198,6 +198,46 @@ nav.top .cta:hover { transform: translateY(-1px); }
   nav.top .links a:not(.cta) { display: none; }
 }
 
+/* ===================== MOBILE POLISH ===================== */
+@media (max-width: 720px) {
+  .container { padding: 0 18px; }
+
+  nav.top .row { height: 56px; }
+  nav.top .brand span { font-size: 15px; }
+  nav.top .cta { padding: 7px 12px; font-size: 12px; gap: 5px; }
+  nav.top .links { gap: 14px; }
+
+  .legal-page { padding: 32px 0 56px; }
+  .legal-header { padding: 32px 0 28px; }
+  .legal-header h1 { font-size: clamp(28px, 8.5vw, 38px); line-height: 1.12; }
+  .legal-header p.sub { font-size: 14.5px; padding: 0 8px; }
+  .legal-header .eyebrow { font-size: 10.5px; padding: 4px 12px; }
+
+  .legal-body { font-size: 15px; line-height: 1.7; }
+  .legal-body h2 { font-size: 19px; margin: 32px 0 12px; padding-top: 16px; }
+  .legal-body h3 { font-size: 15px; margin: 20px 0 6px; }
+  .legal-body ul { padding-left: 20px; }
+  .legal-body .callout { padding: 14px 16px; }
+
+  .changelog-entry { padding: 20px 0 20px 28px; }
+  .changelog-entry::before { left: 4px; top: 32px; }
+  .changelog-entry::after { left: 8px; top: 46px; }
+  .changelog-entry h2 { font-size: 17px; }
+  .changelog-entry li { font-size: 13.5px; }
+  .changelog-entry li .tag { font-size: 9.5px; min-width: 44px; padding: 2px 5px; }
+
+  .back-link { font-size: 12.5px; padding: 7px 12px 7px 10px; }
+
+  footer { padding: 40px 0 28px; font-size: 12px; }
+  footer .row { flex-direction: column; align-items: flex-start; gap: 12px; }
+}
+
+@media (max-width: 380px) {
+  .container { padding: 0 14px; }
+  nav.top .links { gap: 8px; }
+  .legal-body { font-size: 14.5px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after { animation: none !important; transition: none !important; }
 }
