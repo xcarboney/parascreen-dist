@@ -1389,10 +1389,85 @@
       *, ::before, ::after { animation: none !important; transition: none !important; }
       .reveal { opacity: 1; transform: none; }
     }
+    /* ===== PRO POLISH PASS ===== */
+    html { scroll-behavior: smooth; }
+    .scroll-progress { position: fixed; top:0; left:0; right:0; height:2px; z-index:1000; pointer-events:none; }
+    .scroll-progress::before {
+      content: ''; position: absolute; left:0; top:0; bottom:0;
+      width: var(--p, 0%);
+      background: linear-gradient(90deg, #14B8A6, #22D3EE);
+      box-shadow: 0 0 12px rgba(20,184,166,0.55);
+      transition: width 80ms linear;
+    }
+    .hero { --mx: 50%; --my: 30%; }
+    .hero::after {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(420px 320px at var(--mx) var(--my),
+        rgba(45,212,191,0.18), rgba(34,211,238,0.10) 35%, transparent 65%);
+      pointer-events: none; z-index: 1; mix-blend-mode: screen;
+      transition: background 280ms cubic-bezier(.16,1,.3,1);
+    }
+    @media (prefers-reduced-motion: reduce) { .hero::after { display: none; } }
+    .btn-primary { will-change: transform; }
+
+    .fcard, .proof, .how-step {
+      position: relative; isolation: isolate;
+      transition: transform 400ms cubic-bezier(.16,1,.3,1), border-color 400ms, box-shadow 400ms;
+    }
+    .fcard::before, .proof::before {
+      content: ''; position: absolute; inset: -1px;
+      border-radius: inherit;
+      background: conic-gradient(from var(--ang, 0deg),
+        rgba(20,184,166,0.0), rgba(20,184,166,0.65) 90deg,
+        rgba(34,211,238,0.65) 180deg, rgba(20,184,166,0.0) 270deg);
+      opacity: 0; z-index: -1;
+      transition: opacity 350ms; filter: blur(8px);
+    }
+    .fcard:hover::before, .proof:hover::before { opacity: 0.85; animation: psConicSpin 6s linear infinite; }
+    @keyframes psConicSpin { to { --ang: 360deg; } }
+    @property --ang { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+    .fcard:hover, .proof:hover, .how-step:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 16px 40px rgba(20,184,166,0.18);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .fcard:hover::before, .proof:hover::before { animation: none; }
+    }
+
+    section + section { position: relative; }
+    section + section::before {
+      content: ''; position: absolute; left: 50%; top: 0;
+      width: 120px; height: 1px; transform: translateX(-50%);
+      background: linear-gradient(90deg, transparent, rgba(20,184,166,0.55), transparent);
+      pointer-events: none;
+    }
+
+
+    .hero h1 .word {
+      display: inline-block; opacity: 0;
+      transform: translateY(20px);
+      animation: psHeroWord 800ms cubic-bezier(.16,1,.3,1) forwards;
+    }
+    @keyframes psHeroWord { to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: reduce) {
+      .hero h1 .word { opacity: 1; transform: none; animation: none; }
+    }
+
+    .confetti { position: fixed; pointer-events: none; left:0; top:0; width:100vw; height:100vh; z-index:9999; overflow:hidden; }
+    .confetti span {
+      position: absolute; width: 8px; height: 14px;
+      border-radius: 1px; will-change: transform, opacity;
+      animation: psConfetti 1800ms cubic-bezier(.2,.7,.3,1) forwards;
+    }
+    @keyframes psConfetti {
+      0% { transform: translate3d(0,0,0) rotate(0); opacity: 1; }
+      100% { transform: translate3d(var(--cx, 0px), var(--cy, 600px), 0) rotate(540deg); opacity: 0; }
+    }
   </style>
 </head>
 
 <body>
+<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 
 <!-- ================================== NAV ================================== -->
 <nav class="top">
@@ -2034,6 +2109,94 @@
     }, 6000);
   };
   if ('IntersectionObserver' in window) reveal();
+
+  // ===== PRO POLISH =====
+  const psReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  (function(){
+    const bar = document.getElementById('scrollProgress');
+    if (!bar) return;
+    const onScroll = () => {
+      const h = document.documentElement;
+      const max = h.scrollHeight - h.clientHeight;
+      const p = max > 0 ? (h.scrollTop || document.body.scrollTop) / max : 0;
+      bar.style.setProperty('--p', (p * 100) + '%');
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+
+  if (!psReduced) (function(){
+    const hero = document.querySelector('.hero');
+    if (!hero) return;
+    hero.addEventListener('pointermove', (e) => {
+      const r = hero.getBoundingClientRect();
+      hero.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+      hero.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+    });
+  })();
+
+  if (!psReduced) (function(){
+    document.querySelectorAll('.btn-primary').forEach(btn => {
+      btn.addEventListener('pointermove', (e) => {
+        const r = btn.getBoundingClientRect();
+        const x = e.clientX - r.left - r.width/2;
+        const y = e.clientY - r.top  - r.height/2;
+        btn.style.transform = `translate(${x*0.18}px, ${y*0.22}px)`;
+      });
+      btn.addEventListener('pointerleave', () => { btn.style.transform = ''; });
+    });
+  })();
+
+  (function(){
+    const h1 = document.querySelector('.hero h1');
+    if (!h1) return;
+    const tmp = document.createElement('div');
+    tmp.innerHTML = h1.innerHTML;
+    const out = []; let i = 0;
+    const wrapText = (text) => text.split(/(\s+)/).map(seg => {
+      if (/^\s+$/.test(seg)) return seg;
+      return `<span class="word" style="animation-delay:${(i++)*70}ms">${seg}</span>`;
+    }).join('');
+    tmp.childNodes.forEach(n => {
+      if (n.nodeType === 3) out.push(wrapText(n.textContent));
+      else if (n.nodeType === 1) {
+        const inner = wrapText(n.textContent || '');
+        const cls = n.getAttribute('class') ? ` class="${n.getAttribute('class')}"` : '';
+        out.push(`<${n.tagName.toLowerCase()}${cls}>${inner}</${n.tagName.toLowerCase()}>`);
+      }
+    });
+    h1.innerHTML = out.join('');
+  })();
+
+  (function(){
+    const fire = (target) => {
+      if (psReduced) return;
+      const root = document.createElement('div');
+      root.className = 'confetti';
+      document.body.appendChild(root);
+      const r = target.getBoundingClientRect();
+      const cx0 = r.left + r.width/2, cy0 = r.top + r.height/2;
+      const colors = ['#14B8A6', '#2DD4BF', '#22D3EE', '#67E8F9', '#5EEAD4'];
+      for (let i = 0; i < 36; i++) {
+        const s = document.createElement('span');
+        const dx = (Math.random() - 0.5) * 480;
+        const dy = (Math.random() * 0.5 + 0.4) * 540 * (Math.random() < 0.4 ? -1 : 1);
+        s.style.left = cx0 + 'px';
+        s.style.top = cy0 + 'px';
+        s.style.background = colors[i % colors.length];
+        s.style.setProperty('--cx', dx + 'px');
+        s.style.setProperty('--cy', dy + 'px');
+        s.style.animationDelay = (Math.random() * 80) + 'ms';
+        s.style.transform = `rotate(${Math.random()*360}deg)`;
+        root.appendChild(s);
+      }
+      setTimeout(() => root.remove(), 2200);
+    };
+    document.querySelectorAll('a[href$=".dmg"], a[href*="#download"]').forEach(a => {
+      a.addEventListener('click', () => fire(a));
+    });
+  })();
   else document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
 
   // Demo timer increment (recording HUD)
