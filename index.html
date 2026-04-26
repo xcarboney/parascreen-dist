@@ -2158,12 +2158,15 @@
       if (/^\s+$/.test(seg)) return seg;
       return `<span class="word" style="animation-delay:${(i++)*70}ms">${seg}</span>`;
     }).join('');
+    const VOID_TAGS = new Set(['br','hr','img','input','meta','link']);
     tmp.childNodes.forEach(n => {
       if (n.nodeType === 3) out.push(wrapText(n.textContent));
       else if (n.nodeType === 1) {
+        const tag = n.tagName.toLowerCase();
+        if (VOID_TAGS.has(tag)) { out.push(n.outerHTML); return; }
         const inner = wrapText(n.textContent || '');
         const cls = n.getAttribute('class') ? ` class="${n.getAttribute('class')}"` : '';
-        out.push(`<${n.tagName.toLowerCase()}${cls}>${inner}</${n.tagName.toLowerCase()}>`);
+        out.push(`<${tag}${cls}>${inner}</${tag}>`);
       }
     });
     h1.innerHTML = out.join('');
