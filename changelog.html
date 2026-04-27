@@ -54,11 +54,26 @@
       <span class="eyebrow">Changelog</span>
       <h1>What's <span class="grad">new &amp; fixed.</span></h1>
       <p class="sub">Every release, every meaningful change. Shipping features and tightening screws.</p>
-      <div class="meta">Currently shipping · v0.1.6</div>
+      <div class="meta">Currently shipping · v0.1.7</div>
     </div>
 
     <div class="legal-body" style="padding-top: 24px;">
       <ul class="changelog-list">
+
+        <!-- v0.1.7 — updater really works now -->
+        <li class="changelog-entry">
+          <div class="version">
+            <span class="v">v0.1.7</span>
+            <span class="date">April 27, 2026 · Updater really works now</span>
+          </div>
+          <h2>Install update fixed.</h2>
+          <ul>
+            <li><span class="tag fix">Fix</span><span><strong>The big one:</strong> clicking “Install update” on v0.1.5 / v0.1.6 silently no-op'd after the first attempt because each retry mounted a duplicate DMG (“ParaScreen 1”, “ParaScreen 2”, …) without unmounting the previous one. The app then looked for ParaScreen.app at the wrong volume path and gave up. Fixed by force-detaching all stale ParaScreen mounts before every attach.</span></li>
+            <li><span class="tag fix">Fix</span><span>Mount-point detection now picks the volume whose name matches the app, not just the first one in the list — so even if a stale mount survives, we still find the right .app.</span></li>
+            <li><span class="tag fix">Fix</span><span>Any failure in download or install now surfaces a native macOS alert with the actual error message (and an “Open in Browser” fallback), instead of silently returning to the idle state.</span></li>
+            <li><span class="tag fix">Fix</span><span>Capture <code>hdiutil</code>'s stderr in the error path so future debugging has real output instead of just an exit code.</span></li>
+          </ul>
+        </li>
 
         <!-- v0.1.6 — audit fixes -->
         <li class="changelog-entry">
