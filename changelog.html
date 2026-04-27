@@ -54,11 +54,26 @@
       <span class="eyebrow">Changelog</span>
       <h1>What's <span class="grad">new &amp; fixed.</span></h1>
       <p class="sub">Every release, every meaningful change. Shipping features and tightening screws.</p>
-      <div class="meta">Currently shipping · v0.1.3</div>
+      <div class="meta">Currently shipping · v0.1.4</div>
     </div>
 
     <div class="legal-body" style="padding-top: 24px;">
       <ul class="changelog-list">
+
+        <!-- v0.1.4 — update checker -->
+        <li class="changelog-entry">
+          <div class="version">
+            <span class="v">v0.1.4</span>
+            <span class="date">April 26, 2026 · Update checker</span>
+          </div>
+          <h2>Stay current automatically.</h2>
+          <ul>
+            <li><span class="tag new">New</span><span><strong>Check for Updates</strong> menu item in the menu-bar dropdown — instantly compares the running version against the latest GitHub release.</span></li>
+            <li><span class="tag new">New</span><span>Inline update card in <em>Settings → About</em> with current version, status indicator, and a one-click "Download" button when a new version is available.</span></li>
+            <li><span class="tag new">New</span><span>Auto-check on launch (debounced to once every 6 hours, runs 5 seconds after launch so it never collides with permission dialogs). Silent if up-to-date or offline; shows a native macOS alert when a newer release is found.</span></li>
+            <li><span class="tag new">New</span><span>Polls <code>api.github.com/repos/xcarboney/parascreen-dist/releases/latest</code> and grabs the DMG asset directly. No third-party update server.</span></li>
+          </ul>
+        </li>
 
         <!-- v0.1.3 — no accounts -->
         <li class="changelog-entry">
