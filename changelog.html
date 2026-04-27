@@ -54,11 +54,25 @@
       <span class="eyebrow">Changelog</span>
       <h1>What's <span class="grad">new &amp; fixed.</span></h1>
       <p class="sub">Every release, every meaningful change. Shipping features and tightening screws.</p>
-      <div class="meta">Currently shipping · v0.1.5</div>
+      <div class="meta">Currently shipping · v0.1.6</div>
     </div>
 
     <div class="legal-body" style="padding-top: 24px;">
       <ul class="changelog-list">
+
+        <!-- v0.1.6 — audit fixes -->
+        <li class="changelog-entry">
+          <div class="version">
+            <span class="v">v0.1.6</span>
+            <span class="date">April 27, 2026 · Audit fixes</span>
+          </div>
+          <h2>Updater hardening.</h2>
+          <ul>
+            <li><span class="tag fix">Fix</span><span>Updater no longer leaks KVO observers between download attempts (the holding bag is cleared at the start of every download instead of growing forever).</span></li>
+            <li><span class="tag fix">Fix</span><span>Updater pre-checks <code>/Applications</code> writability before staging the new bundle. On managed devices where the folder is root-owned, you now get a clear “Can't write to /Applications” error pointing at GitHub Releases instead of a cryptic mid-swap permission failure.</span></li>
+            <li><span class="tag fix">Fix</span><span>If the atomic swap fails after staging, the half-installed bundle is cleaned up so a retry doesn't trip on stale temp files.</span></li>
+          </ul>
+        </li>
 
         <!-- v0.1.5 — real updater -->
         <li class="changelog-entry">
