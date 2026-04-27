@@ -54,11 +54,25 @@
       <span class="eyebrow">Changelog</span>
       <h1>What's <span class="grad">new &amp; fixed.</span></h1>
       <p class="sub">Every release, every meaningful change. Shipping features and tightening screws.</p>
-      <div class="meta">Currently shipping · v0.1.2</div>
+      <div class="meta">Currently shipping · v0.1.3</div>
     </div>
 
     <div class="legal-body" style="padding-top: 24px;">
       <ul class="changelog-list">
+
+        <!-- v0.1.3 — no accounts -->
+        <li class="changelog-entry">
+          <div class="version">
+            <span class="v">v0.1.3</span>
+            <span class="date">April 26, 2026 · No accounts, ever</span>
+          </div>
+          <h2>Removed sign-in entirely.</h2>
+          <ul>
+            <li><span class="tag remove">Remove</span><span>Sign-in screen, account tab in Settings, email-code auth, and license/entitlement gates — all gone. ParaScreen is now 100% on-device with zero accounts and zero network calls (besides update checks).</span></li>
+            <li><span class="tag remove">Remove</span><span>Auth dependency on the Paravoice backend. ParaScreen never talks to any auth server.</span></li>
+            <li><span class="tag fix">Fix</span><span>All capture flows (area, window, full-screen, scrolling, OCR, recording) now work immediately without any sign-in gate.</span></li>
+          </ul>
+        </li>
 
         <!-- v0.1.2 — transparent icon -->
         <li class="changelog-entry">
